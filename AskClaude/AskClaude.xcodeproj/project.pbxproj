@@ -1,0 +1,610 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AAA000001 /* AskClaudeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100001 /* AskClaudeApp.swift */; };
+		AAA000002 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100002 /* AppDelegate.swift */; };
+		AAA000020 /* TextSizeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100020 /* TextSizeManager.swift */; };
+		RRR000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = RRR100001 /* Assets.xcassets */; };
+		AAA000003 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100003 /* ContentView.swift */; };
+		AAA000004 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100004 /* ChatView.swift */; };
+		AAA000005 /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100005 /* MessageBubble.swift */; };
+		AAA000006 /* MarkdownContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100006 /* MarkdownContentView.swift */; };
+		AAA000007 /* CodeBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100007 /* CodeBlockView.swift */; };
+		AAA000008 /* InputBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100008 /* InputBar.swift */; };
+		AAA000009 /* ThinkingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100009 /* ThinkingIndicator.swift */; };
+		AAA000010 /* SessionSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100010 /* SessionSidebar.swift */; };
+		AAA000011 /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100011 /* ChatMessage.swift */; };
+		AAA000012 /* ChatSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100012 /* ChatSession.swift */; };
+		AAA000013 /* ClaudeOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100013 /* ClaudeOutput.swift */; };
+		AAA000014 /* ClaudeProcessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100014 /* ClaudeProcessManager.swift */; };
+		AAA000015 /* IPCService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100015 /* IPCService.swift */; };
+		AAA000017 /* ChatPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100019 /* ChatPersistence.swift */; };
+		AAA000016 /* AppGroupConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100016 /* AppGroupConfig.swift */; };
+		BBB000001 /* FinderSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB100001 /* FinderSync.swift */; };
+		BBB000002 /* IPCClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB100002 /* IPCClient.swift */; };
+		BBB000003 /* AppGroupConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100016 /* AppGroupConfig.swift */; };
+		CCC000001 /* FinderSyncExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CCC100001 /* FinderSyncExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DDD000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EEE000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FFF000002;
+			remoteInfo = FinderSyncExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		GGG000001 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				CCC000001 /* FinderSyncExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		AAA100001 /* AskClaudeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskClaudeApp.swift; sourceTree = "<group>"; };
+		AAA100002 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		AAA100020 /* TextSizeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSizeManager.swift; sourceTree = "<group>"; };
+		RRR100001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AAA100003 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		AAA100004 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		AAA100005 /* MessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
+		AAA100006 /* MarkdownContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownContentView.swift; sourceTree = "<group>"; };
+		AAA100007 /* CodeBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeBlockView.swift; sourceTree = "<group>"; };
+		AAA100008 /* InputBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputBar.swift; sourceTree = "<group>"; };
+		AAA100009 /* ThinkingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkingIndicator.swift; sourceTree = "<group>"; };
+		AAA100010 /* SessionSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSidebar.swift; sourceTree = "<group>"; };
+		AAA100011 /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
+		AAA100012 /* ChatSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSession.swift; sourceTree = "<group>"; };
+		AAA100013 /* ClaudeOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeOutput.swift; sourceTree = "<group>"; };
+		AAA100014 /* ClaudeProcessManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeProcessManager.swift; sourceTree = "<group>"; };
+		AAA100015 /* IPCService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPCService.swift; sourceTree = "<group>"; };
+		AAA100019 /* ChatPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatPersistence.swift; sourceTree = "<group>"; };
+		AAA100016 /* AppGroupConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroupConfig.swift; sourceTree = "<group>"; };
+		AAA100017 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AAA100018 /* AskClaude.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AskClaude.entitlements; sourceTree = "<group>"; };
+		BBB100001 /* FinderSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinderSync.swift; sourceTree = "<group>"; };
+		BBB100002 /* IPCClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPCClient.swift; sourceTree = "<group>"; };
+		BBB100003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BBB100004 /* FinderSyncExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FinderSyncExtension.entitlements; sourceTree = "<group>"; };
+		CCC100001 /* FinderSyncExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FinderSyncExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		HHH100001 /* AskClaude.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AskClaude.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		III000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		III000002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		JJJ000001 = {
+			isa = PBXGroup;
+			children = (
+				JJJ000002 /* AskClaude */,
+				JJJ000003 /* FinderSyncExtension */,
+				JJJ000004 /* Shared */,
+				JJJ000005 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		JJJ000002 /* AskClaude */ = {
+			isa = PBXGroup;
+			children = (
+				JJJ000006 /* App */,
+				JJJ000007 /* Views */,
+				JJJ000008 /* Models */,
+				JJJ000009 /* Services */,
+				JJJ000010 /* Resources */,
+				AAA100017 /* Info.plist */,
+				AAA100018 /* AskClaude.entitlements */,
+			);
+			path = AskClaude;
+			sourceTree = "<group>";
+		};
+		JJJ000003 /* FinderSyncExtension */ = {
+			isa = PBXGroup;
+			children = (
+				BBB100001 /* FinderSync.swift */,
+				BBB100002 /* IPCClient.swift */,
+				BBB100003 /* Info.plist */,
+				BBB100004 /* FinderSyncExtension.entitlements */,
+			);
+			path = FinderSyncExtension;
+			sourceTree = "<group>";
+		};
+		JJJ000004 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				AAA100016 /* AppGroupConfig.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		JJJ000005 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				HHH100001 /* AskClaude.app */,
+				CCC100001 /* FinderSyncExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		JJJ000006 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				AAA100001 /* AskClaudeApp.swift */,
+				AAA100002 /* AppDelegate.swift */,
+				AAA100020 /* TextSizeManager.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		JJJ000007 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AAA100003 /* ContentView.swift */,
+				AAA100004 /* ChatView.swift */,
+				AAA100005 /* MessageBubble.swift */,
+				AAA100006 /* MarkdownContentView.swift */,
+				AAA100007 /* CodeBlockView.swift */,
+				AAA100008 /* InputBar.swift */,
+				AAA100009 /* ThinkingIndicator.swift */,
+				AAA100010 /* SessionSidebar.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		JJJ000008 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AAA100011 /* ChatMessage.swift */,
+				AAA100012 /* ChatSession.swift */,
+				AAA100013 /* ClaudeOutput.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		JJJ000009 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				AAA100014 /* ClaudeProcessManager.swift */,
+				AAA100015 /* IPCService.swift */,
+				AAA100019 /* ChatPersistence.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		JJJ000010 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				RRR100001 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FFF000001 /* AskClaude */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = KKK000001 /* Build configuration list for PBXNativeTarget "AskClaude" */;
+			buildPhases = (
+				LLL000001 /* Sources */,
+				III000001 /* Frameworks */,
+				MMM000001 /* Resources */,
+				GGG000001 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				NNN000001 /* PBXTargetDependency */,
+			);
+			name = AskClaude;
+			productName = AskClaude;
+			productReference = HHH100001 /* AskClaude.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FFF000002 /* FinderSyncExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = KKK000002 /* Build configuration list for PBXNativeTarget "FinderSyncExtension" */;
+			buildPhases = (
+				LLL000002 /* Sources */,
+				III000002 /* Frameworks */,
+				MMM000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FinderSyncExtension;
+			productName = FinderSyncExtension;
+			productReference = CCC100001 /* FinderSyncExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EEE000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					FFF000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					FFF000002 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = KKK000003 /* Build configuration list for PBXProject "AskClaude" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = JJJ000001;
+			productRefGroup = JJJ000005 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FFF000001 /* AskClaude */,
+				FFF000002 /* FinderSyncExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		MMM000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				RRR000001 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		MMM000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		LLL000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AAA000001 /* AskClaudeApp.swift in Sources */,
+				AAA000002 /* AppDelegate.swift in Sources */,
+				AAA000020 /* TextSizeManager.swift in Sources */,
+				AAA000003 /* ContentView.swift in Sources */,
+				AAA000004 /* ChatView.swift in Sources */,
+				AAA000005 /* MessageBubble.swift in Sources */,
+				AAA000006 /* MarkdownContentView.swift in Sources */,
+				AAA000007 /* CodeBlockView.swift in Sources */,
+				AAA000008 /* InputBar.swift in Sources */,
+				AAA000009 /* ThinkingIndicator.swift in Sources */,
+				AAA000010 /* SessionSidebar.swift in Sources */,
+				AAA000011 /* ChatMessage.swift in Sources */,
+				AAA000012 /* ChatSession.swift in Sources */,
+				AAA000013 /* ClaudeOutput.swift in Sources */,
+				AAA000014 /* ClaudeProcessManager.swift in Sources */,
+				AAA000015 /* IPCService.swift in Sources */,
+				AAA000017 /* ChatPersistence.swift in Sources */,
+				AAA000016 /* AppGroupConfig.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		LLL000002 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BBB000001 /* FinderSync.swift in Sources */,
+				BBB000002 /* IPCClient.swift in Sources */,
+				BBB000003 /* AppGroupConfig.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		NNN000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FFF000002 /* FinderSyncExtension */;
+			targetProxy = DDD000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		OOO000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		OOO000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		PPP000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AskClaude/AskClaude.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7SG97J86JV;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AskClaude/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.askclaude.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		PPP000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AskClaude/AskClaude.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7SG97J86JV;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AskClaude/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.askclaude.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		QQQ000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = FinderSyncExtension/FinderSyncExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7SG97J86JV;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = FinderSyncExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Ask Claude";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.askclaude.app.FinderSyncExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		QQQ000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = FinderSyncExtension/FinderSyncExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7SG97J86JV;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = FinderSyncExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Ask Claude";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.askclaude.app.FinderSyncExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		KKK000001 /* Build configuration list for PBXNativeTarget "AskClaude" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				PPP000001 /* Debug */,
+				PPP000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		KKK000002 /* Build configuration list for PBXNativeTarget "FinderSyncExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				QQQ000001 /* Debug */,
+				QQQ000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		KKK000003 /* Build configuration list for PBXProject "AskClaude" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OOO000001 /* Debug */,
+				OOO000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = EEE000001 /* Project object */;
+}
