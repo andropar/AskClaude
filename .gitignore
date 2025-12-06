@@ -1,6 +1,7 @@
 # Build artifacts
 build/
 DerivedData/
+release-build/
 *.xcuserstate
 *.xcworkspace/xcuserdata/
 

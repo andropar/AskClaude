@@ -10,6 +10,7 @@
 		AAA000001 /* AskClaudeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100001 /* AskClaudeApp.swift */; };
 		AAA000002 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100002 /* AppDelegate.swift */; };
 		AAA000020 /* TextSizeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100020 /* TextSizeManager.swift */; };
+		AAA000021 /* SettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100021 /* SettingsManager.swift */; };
 		RRR000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = RRR100001 /* Assets.xcassets */; };
 		AAA000003 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100003 /* ContentView.swift */; };
 		AAA000004 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100004 /* ChatView.swift */; };
@@ -60,6 +61,7 @@
 		AAA100001 /* AskClaudeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskClaudeApp.swift; sourceTree = "<group>"; };
 		AAA100002 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AAA100020 /* TextSizeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSizeManager.swift; sourceTree = "<group>"; };
+		AAA100021 /* SettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsManager.swift; sourceTree = "<group>"; };
 		RRR100001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AAA100003 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AAA100004 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 				AAA100001 /* AskClaudeApp.swift */,
 				AAA100002 /* AppDelegate.swift */,
 				AAA100020 /* TextSizeManager.swift */,
+				AAA100021 /* SettingsManager.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -311,6 +314,7 @@
 				AAA000001 /* AskClaudeApp.swift in Sources */,
 				AAA000002 /* AppDelegate.swift in Sources */,
 				AAA000020 /* TextSizeManager.swift in Sources */,
+				AAA000021 /* SettingsManager.swift in Sources */,
 				AAA000003 /* ContentView.swift in Sources */,
 				AAA000004 /* ChatView.swift in Sources */,
 				AAA000005 /* MessageBubble.swift in Sources */,

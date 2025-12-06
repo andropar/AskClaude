@@ -423,9 +423,7 @@ struct OnboardingView: View {
     }
 
     private func checkClaudeStatus() {
-        Task {
-            let manager = ClaudeProcessManager()
-
+        Task { @MainActor in
             // Check if Claude is installed
             let possiblePaths = [
                 "/Users/\(NSUserName())/.local/bin/claude",
@@ -443,18 +441,15 @@ struct OnboardingView: View {
             }
 
             if !claudeFound {
-                await MainActor.run {
-                    withAnimation { claudeStatus = .notInstalled }
-                }
+                withAnimation { claudeStatus = .notInstalled }
                 return
             }
 
             // Check authentication
+            let manager = ClaudeProcessManager()
             let isAuthenticated = await manager.checkAuthentication()
-            await MainActor.run {
-                withAnimation {
-                    claudeStatus = isAuthenticated ? .ready : .notAuthenticated
-                }
+            withAnimation {
+                claudeStatus = isAuthenticated ? .ready : .notAuthenticated
             }
         }
     }
