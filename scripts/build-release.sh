@@ -21,7 +21,7 @@ mkdir -p "$BUILD_DIR"
 
 echo "Building release..."
 
-# Build the app using xcodebuild
+# Build the app using xcodebuild with automatic signing
 cd "$PROJECT_DIR/AskClaude"
 xcodebuild -project AskClaude.xcodeproj \
     -scheme AskClaude \
@@ -29,9 +29,7 @@ xcodebuild -project AskClaude.xcodeproj \
     -derivedDataPath "$BUILD_DIR/DerivedData" \
     -archivePath "$BUILD_DIR/$APP_NAME.xcarchive" \
     archive \
-    CODE_SIGN_IDENTITY="-" \
-    CODE_SIGNING_REQUIRED=NO \
-    CODE_SIGNING_ALLOWED=NO
+    CODE_SIGN_STYLE=Automatic
 
 # Export the app from the archive
 echo "Exporting app..."

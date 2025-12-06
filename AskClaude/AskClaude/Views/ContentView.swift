@@ -416,9 +416,17 @@ struct OnboardingView: View {
             }
 
         case .ready:
-            Text("Right-click a folder in Finder to start")
-                .font(.system(size: 16, weight: .regular))
-                .foregroundStyle(Color(hex: "666666"))
+            VStack(spacing: 16) {
+                Text("Right-click a folder in Finder to start")
+                    .font(.system(size: 16, weight: .regular))
+                    .foregroundStyle(Color(hex: "666666"))
+
+                Text("You can close this window — AskClaude runs in the background and will open automatically when you select \"Ask Claude\" from Finder.")
+                    .font(.system(size: 13))
+                    .foregroundStyle(Color(hex: "999999"))
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: 340)
+            }
         }
     }
 

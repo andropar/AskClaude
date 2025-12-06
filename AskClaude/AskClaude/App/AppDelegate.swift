@@ -5,8 +5,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var ipcService: IPCService?
     private var statusItem: NSStatusItem!
 
-    private let hasEnabledExtensionKey = "hasEnabledFinderExtension"
-
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Start IPC listener for Finder extension communication
         ipcService = IPCService()
@@ -36,24 +34,45 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func enableFinderExtensionIfNeeded() {
-        let defaults = UserDefaults.standard
-
-        // Only try once
-        guard !defaults.bool(forKey: hasEnabledExtensionKey) else { return }
-        defaults.set(true, forKey: hasEnabledExtensionKey)
-
-        // Try to enable the extension using pluginkit
+        // Always try to register and enable the extension on launch
+        // This handles fresh installs and updates
         DispatchQueue.global(qos: .utility).async {
-            let process = Process()
-            process.executableURL = URL(fileURLWithPath: "/usr/bin/pluginkit")
-            process.arguments = ["-e", "use", "-i", "com.askclaude.app.FinderSyncExtension"]
+            // First, register the extension (needed for unsigned apps)
+            let appPath = Bundle.main.bundlePath
+            let extensionPath = "\(appPath)/Contents/PlugIns/FinderSyncExtension.appex"
+
+            // Register the extension
+            let registerProcess = Process()
+            registerProcess.executableURL = URL(fileURLWithPath: "/usr/bin/pluginkit")
+            registerProcess.arguments = ["-a", extensionPath]
 
             do {
-                try process.run()
-                process.waitUntilExit()
-                print("[AppDelegate] Finder extension enable attempt completed with status: \(process.terminationStatus)")
+                try registerProcess.run()
+                registerProcess.waitUntilExit()
+                print("[AppDelegate] Extension registration completed with status: \(registerProcess.terminationStatus)")
+            } catch {
+                print("[AppDelegate] Failed to register extension: \(error)")
+            }
+
+            // Small delay to let registration complete
+            Thread.sleep(forTimeInterval: 0.5)
+
+            // Then enable the extension
+            let enableProcess = Process()
+            enableProcess.executableURL = URL(fileURLWithPath: "/usr/bin/pluginkit")
+            enableProcess.arguments = ["-e", "use", "-i", "com.askclaude.app.FinderSyncExtension"]
+
+            do {
+                try enableProcess.run()
+                enableProcess.waitUntilExit()
+                print("[AppDelegate] Finder extension enable completed with status: \(enableProcess.terminationStatus)")
             } catch {
                 print("[AppDelegate] Failed to enable Finder extension: \(error)")
+            }
+
+            // Post notification so UI can update
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: .finderExtensionStatusChanged, object: nil)
             }
         }
     }
@@ -131,4 +150,5 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 extension Notification.Name {
     static let openSessionForFolder = Notification.Name("openSessionForFolder")
+    static let finderExtensionStatusChanged = Notification.Name("finderExtensionStatusChanged")
 }
