@@ -453,6 +453,7 @@ struct ImageBlockView: View {
     @EnvironmentObject var textSizeManager: TextSizeManager
     @State private var isLoading = false
     @State private var loadError: String?
+    @State private var imageLoadTask: URLSessionDataTask?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -512,6 +513,9 @@ struct ImageBlockView: View {
                     .italic()
             }
         }
+        .onDisappear {
+            imageLoadTask?.cancel()
+        }
     }
 
     private func loadImage() {
@@ -531,18 +535,23 @@ struct ImageBlockView: View {
         }
 
         isLoading = true
-        URLSession.shared.dataTask(with: imageURL) { data, _, error in
+        let task = URLSession.shared.dataTask(with: imageURL) { data, _, error in
             DispatchQueue.main.async {
                 isLoading = false
                 if let error = error {
-                    loadError = error.localizedDescription
+                    // Don't show error if task was cancelled
+                    if (error as NSError).code != NSURLErrorCancelled {
+                        loadError = error.localizedDescription
+                    }
                 } else if let data = data, let image = NSImage(data: data) {
                     loadedImages[url] = image
                 } else {
                     loadError = "Failed to load"
                 }
             }
-        }.resume()
+        }
+        imageLoadTask = task
+        task.resume()
     }
 }
 
@@ -731,6 +740,31 @@ struct FilePreviewView: View {
 
             guard FileManager.default.fileExists(atPath: path) else {
                 loadError = "File not found"
+                DispatchQueue.main.async {
+                    self.error = loadError
+                    self.isLoading = false
+                }
+                return
+            }
+
+            // Check file size to prevent loading huge files
+            guard let fileAttributes = try? FileManager.default.attributesOfItem(atPath: path),
+                  let fileSize = fileAttributes[.size] as? Int64 else {
+                loadError = "Cannot read file attributes"
+                DispatchQueue.main.async {
+                    self.error = loadError
+                    self.isLoading = false
+                }
+                return
+            }
+
+            // 10MB limit for text files
+            let maxTextFileSize: Int64 = 10 * 1024 * 1024
+            let isTextFile = ["md", "markdown", "swift", "py", "python", "js", "javascript",
+                             "ts", "typescript", "json", "xml", "html", "htm", "txt", "log", "css"].contains(ext)
+
+            if isTextFile && fileSize > maxTextFileSize {
+                loadError = "File too large (\(ByteCountFormatter.string(fromByteCount: fileSize, countStyle: .file))). Maximum size for text preview is \(ByteCountFormatter.string(fromByteCount: maxTextFileSize, countStyle: .file))"
                 DispatchQueue.main.async {
                     self.error = loadError
                     self.isLoading = false
