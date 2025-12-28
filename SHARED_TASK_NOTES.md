@@ -2,7 +2,20 @@
 
 ## Recent Work (2025-12-28)
 
-### Latest Fix - Race Condition in Pipe Writes
+### Latest Fixes - Resource Leaks and File Size Limits
+**CSV file size limit missing** (MarkdownContentView.swift:764)
+- CSV files were not included in the 10MB size limit check for text files
+- Large CSV files (1GB+) could be loaded entirely into memory, causing crashes
+- Added "csv" to the list of text file extensions subject to size limits
+- Now prevents memory issues when previewing large CSV files
+
+**CFMessagePort resource leak** (IPCClient.swift:7-37)
+- Every message from Finder extension created a CFMessagePort but never invalidated it
+- Over many invocations, this accumulated system resources (ports, file descriptors)
+- Added `defer { CFMessagePortInvalidate(remotePort) }` to ensure cleanup
+- Port is now properly released after each message send
+
+### Earlier Fix - Race Condition in Pipe Writes
 **Race condition when writing to stdin pipe** (ClaudeProcessManager.swift:161-238)
 - Fixed potential crash when session stops during message send
 - Problem: Code checked `isRunning` then wrote to pipe in two non-atomic operations
