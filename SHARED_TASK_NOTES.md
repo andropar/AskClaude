@@ -2,7 +2,7 @@
 
 ## Recent Work (2025-12-28)
 
-Fixed two critical memory leaks and improved resource cleanup:
+Fixed multiple resource leaks:
 
 ### Fixed Bugs
 1. **Timer memory leaks in ChatView.swift** (lines 293-320, 383-430)
@@ -12,6 +12,11 @@ Fixed two critical memory leaks and improved resource cleanup:
 2. **File handle cleanup in ClaudeProcessManager.swift** (lines 232-254)
    - Added explicit file handle closing before process termination
    - Prevents potential file descriptor leaks during session cleanup
+
+3. **File handle leaks in ClaudeProcessManager.swift** (lines 47-49, 344-346)
+   - Fixed leak in `claudePath` property when running `which claude` command
+   - Fixed leak in `checkAuthentication()` method when checking stderr output
+   - Both methods now properly close file handles after reading data
 
 ### Potential Improvements for Next Iteration
 
