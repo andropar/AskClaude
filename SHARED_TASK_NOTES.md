@@ -2,9 +2,20 @@
 
 ## Recent Work (2025-12-28)
 
-Fixed multiple resource leaks:
+### Latest Fixes - Resource Management in MarkdownContentView
+1. **Uncancellable network requests in ImageBlockView** (MarkdownContentView.swift:449-553)
+   - Network image loading tasks were not stored, so they couldn't be cancelled
+   - Added `@State private var imageLoadTask` to store URLSessionDataTask
+   - Added `.onDisappear` to cancel task when view disappears
+   - Prevents resource waste from image loading continuing after view is dismissed
 
-### Fixed Bugs
+2. **Missing file size limits in FilePreviewView** (MarkdownContentView.swift:724-764)
+   - File previews would attempt to load entire file into memory before truncating
+   - Could cause crashes or hangs on very large files (1GB+ text files)
+   - Added 10MB limit check for text files before attempting to load
+   - Shows user-friendly error message with file size when limit exceeded
+
+### Earlier Fixes - Memory and File Handle Leaks
 1. **Timer memory leaks in ChatView.swift** (lines 293-320, 383-430)
    - `BouncingDots` and `ThinkingRow` views were creating timers that never got invalidated
    - Added proper cleanup in `onDisappear` to prevent memory leaks
