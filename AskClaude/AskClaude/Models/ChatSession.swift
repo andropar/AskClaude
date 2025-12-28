@@ -133,6 +133,14 @@ class ChatSession: ObservableObject, Identifiable {
 
     func stop() {
         processManager?.stopSession()
+
+        // Reset all state to prevent stale data
+        isProcessing = false
+        isThinking = false
+        currentActivity = nil
+        pendingPermission = nil
+        currentStreamingMessageId = nil
+        currentBlockType = nil
     }
 
     func interrupt() {
@@ -141,6 +149,16 @@ class ChatSession: ObservableObject, Identifiable {
         isThinking = false
         currentActivity = nil
         pendingPermission = nil
+
+        // Mark any streaming message as complete before resetting
+        if let msgId = currentStreamingMessageId,
+           let index = messages.firstIndex(where: { $0.id == msgId }) {
+            messages[index].isStreaming = false
+        }
+
+        // Reset streaming state to prevent stale references
+        currentStreamingMessageId = nil
+        currentBlockType = nil
 
         // Add a system message indicating interruption
         let interruptMessage = ChatMessage(role: .assistant, content: "*Interrupted by user*")

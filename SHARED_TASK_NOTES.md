@@ -2,7 +2,23 @@
 
 ## Recent Work (2025-12-28)
 
-### Latest Fix - Memory Safety in ClaudeProcessManager
+### Latest Fix - Session State Management
+**Incomplete state cleanup in ChatSession** (ChatSession.swift:134-158)
+1. **Fixed `interrupt()` method** - Now properly cleans up streaming state before adding interrupt message
+   - Marks streaming messages as complete before resetting
+   - Prevents stale references to `currentStreamingMessageId` and `currentBlockType`
+   - Ensures UI consistency when user interrupts Claude
+
+2. **Fixed `stop()` method** - Now resets all session state variables
+   - Clears `isProcessing`, `isThinking`, `currentActivity`
+   - Resets `pendingPermission`, `currentStreamingMessageId`, `currentBlockType`
+   - Prevents stale state when session is stopped and potentially restarted
+
+3. **Fixed force unwrap in AppDelegate** - Changed `statusItem: NSStatusItem!` to optional
+   - Eliminates potential crash if `setupMenuBar()` fails
+   - Uses safe optional chaining throughout
+
+### Earlier Fix - Memory Safety in ClaudeProcessManager
 **Unbounded buffer growth protection** (ClaudeProcessManager.swift:263-286)
 - Added 10MB limit on `outputBuffer` to prevent memory exhaustion
 - If Claude process sends malformed output without newlines, buffer would grow indefinitely
