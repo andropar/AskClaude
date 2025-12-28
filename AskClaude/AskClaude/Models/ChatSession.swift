@@ -134,6 +134,12 @@ class ChatSession: ObservableObject, Identifiable {
     func stop() {
         processManager?.stopSession()
 
+        // Mark any streaming message as complete before resetting
+        if let msgId = currentStreamingMessageId,
+           let index = messages.firstIndex(where: { $0.id == msgId }) {
+            messages[index].isStreaming = false
+        }
+
         // Reset all state to prevent stale data
         isProcessing = false
         isThinking = false
@@ -254,6 +260,14 @@ class ChatSession: ObservableObject, Identifiable {
 
         case .result(let resultEvent):
             // Conversation turn complete
+
+            // Mark any streaming message as complete before clearing state
+            // (safety measure in case contentBlockStop was missed)
+            if let msgId = currentStreamingMessageId,
+               let index = messages.firstIndex(where: { $0.id == msgId }) {
+                messages[index].isStreaming = false
+            }
+
             isProcessing = false
             isThinking = false
             currentActivity = nil
