@@ -3,7 +3,7 @@ import SwiftUI
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var ipcService: IPCService?
-    private var statusItem: NSStatusItem!
+    private var statusItem: NSStatusItem?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Start IPC listener for Finder extension communication
@@ -80,7 +80,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func setupMenuBar() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
 
-        if let button = statusItem.button {
+        if let button = statusItem?.button {
             button.image = NSImage(systemSymbolName: "sparkle", accessibilityDescription: "AskClaude")
         }
 
@@ -89,7 +89,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
 
-        statusItem.menu = menu
+        statusItem?.menu = menu
     }
 
     @objc private func showWindow() {
