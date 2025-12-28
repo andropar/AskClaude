@@ -232,8 +232,14 @@ class ClaudeProcessManager: ObservableObject {
     func stopSession() {
         print("[ClaudeProcessManager] Stopping session")
 
+        // Clear handlers first to prevent any callbacks during cleanup
         stdoutPipe?.fileHandleForReading.readabilityHandler = nil
         stderrPipe?.fileHandleForReading.readabilityHandler = nil
+
+        // Close file handles to ensure they're properly released
+        try? stdoutPipe?.fileHandleForReading.close()
+        try? stderrPipe?.fileHandleForReading.close()
+        try? stdinPipe?.fileHandleForWriting.close()
 
         if process?.isRunning == true {
             process?.terminate()
