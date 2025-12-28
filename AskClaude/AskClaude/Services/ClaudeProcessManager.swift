@@ -15,6 +15,9 @@ class ClaudeProcessManager: ObservableObject {
 
     private var outputBuffer = ""
 
+    // Maximum buffer size: 10MB to prevent unbounded memory growth
+    private let maxBufferSize = 10 * 1024 * 1024
+
     var onEvent: ((ClaudeEvent) -> Void)?
 
     /// Find the claude CLI executable
@@ -252,12 +255,23 @@ class ClaudeProcessManager: ObservableObject {
         stdinPipe = nil
         stdoutPipe = nil
         stderrPipe = nil
+        outputBuffer = ""  // Clear buffer to prevent data leakage between sessions
         isRunning = false
         isProcessing = false
     }
 
     private func processOutput(_ output: String) {
         outputBuffer += output
+
+        // Safety check: prevent unbounded buffer growth from malformed output
+        // If buffer exceeds limit without finding a newline, clear it and log error
+        if outputBuffer.count > maxBufferSize {
+            print("[ClaudeProcessManager] ERROR: Output buffer exceeded \(maxBufferSize) bytes without newline. Clearing buffer to prevent memory issues.")
+            print("[ClaudeProcessManager] Buffer preview: \(outputBuffer.prefix(200))...")
+            outputBuffer = ""
+            error = "Received malformed output from Claude process (no newlines)"
+            return
+        }
 
         // Process complete lines
         while let newlineIndex = outputBuffer.firstIndex(of: "\n") {

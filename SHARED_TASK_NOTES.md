@@ -2,7 +2,15 @@
 
 ## Recent Work (2025-12-28)
 
-### Latest Fixes - Resource Management in MarkdownContentView
+### Latest Fix - Memory Safety in ClaudeProcessManager
+**Unbounded buffer growth protection** (ClaudeProcessManager.swift:263-286)
+- Added 10MB limit on `outputBuffer` to prevent memory exhaustion
+- If Claude process sends malformed output without newlines, buffer would grow indefinitely
+- Now clears buffer and logs error when limit exceeded
+- Also clears buffer on session stop to prevent data leakage between sessions
+- Protects against process malfunction or streaming bugs
+
+### Earlier Fixes - Resource Management in MarkdownContentView
 1. **Uncancellable network requests in ImageBlockView** (MarkdownContentView.swift:449-553)
    - Network image loading tasks were not stored, so they couldn't be cancelled
    - Added `@State private var imageLoadTask` to store URLSessionDataTask
@@ -29,36 +37,34 @@
    - Fixed leak in `checkAuthentication()` method when checking stderr output
    - Both methods now properly close file handles after reading data
 
-### Potential Improvements for Next Iteration
+### Priority Improvements for Next Iteration
 
-1. **Error Handling**
+1. **Testing Infrastructure** (HIGH PRIORITY)
+   - No unit tests currently exist - critical for preventing regressions
+   - Add tests for ClaudeOutputParser JSON parsing (handles complex stream-json)
+   - Add tests for ChatSession message handling
+   - Add tests for file browser path navigation logic
+
+2. **Error Handling**
+   - Error messages only logged, not shown to users
+   - Add user-facing alert dialogs for errors (auth failures, process crashes)
    - Add retry logic for Claude CLI connection failures
-   - Better error messages when claude binary is not found or auth fails
-   - Consider showing a user-friendly alert dialog for errors instead of just logging
 
-2. **File Browser**
-   - Add file watching/refresh when files change externally (e.g., when Claude creates files)
-   - Consider adding file preview functionality
-   - Add context menu for files (copy path, reveal in Finder, etc.)
-
-3. **Performance**
-   - The file browser loads synchronously on every path change - could benefit from caching
-   - Large file lists could be slow - consider pagination or virtualization
+3. **Code Organization**
+   - MarkdownContentView.swift: 1,186 lines (extract ImageBlockView, FilePreviewView, etc.)
+   - ChatView.swift: 924 lines (extract FileBrowserView, PermissionDialog, etc.)
+   - ContentView.swift: 501 lines (consider splitting sidebar)
 
 4. **Session Management**
-   - Consider persisting chat history between app launches
+   - Persist chat history between app launches
    - Add ability to rename sessions
    - Export chat history feature
 
-5. **Testing**
-   - No unit tests currently exist - consider adding tests for:
-     - ClaudeOutputParser JSON parsing
-     - ChatSession message handling
-     - File browser path navigation logic
-
-6. **Code Quality**
-   - Some views in ChatView.swift are getting large (915 lines) - consider splitting into separate files
-   - FileBrowserView could be moved to its own file
+5. **File Browser Improvements**
+   - Add file watching/refresh when files change externally
+   - Add context menu for files (copy path, reveal in Finder)
+   - Add caching to prevent synchronous reloads on every path change
+   - Consider pagination for large file lists
 
 ## Build Status
 ✅ Project builds successfully with no errors or warnings
