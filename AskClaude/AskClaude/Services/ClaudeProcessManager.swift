@@ -44,7 +44,10 @@ class ClaudeProcessManager: ObservableObject {
             try whichProcess.run()
             whichProcess.waitUntilExit()
 
-            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            let fileHandle = pipe.fileHandleForReading
+            let data = fileHandle.readDataToEndOfFile()
+            try? fileHandle.close()
+
             if let path = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines),
                !path.isEmpty {
                 return path
@@ -338,7 +341,10 @@ extension ClaudeProcessManager {
                 process.waitUntilExit()
 
                 // Check stderr for auth errors
-                let stderrData = stderrPipe.fileHandleForReading.readDataToEndOfFile()
+                let stderrHandle = stderrPipe.fileHandleForReading
+                let stderrData = stderrHandle.readDataToEndOfFile()
+                try? stderrHandle.close()
+
                 if let stderrOutput = String(data: stderrData, encoding: .utf8) {
                     if stderrOutput.contains("not logged in") ||
                        stderrOutput.contains("authenticate") ||
