@@ -294,6 +294,7 @@ struct ModelSelector: View {
 
 struct BouncingDots: View {
     @State private var activeIndex = 0
+    @State private var timer: Timer?
 
     var body: some View {
         HStack(spacing: 3) {
@@ -305,11 +306,15 @@ struct BouncingDots: View {
             }
         }
         .onAppear {
-            Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { _ in
+            timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { _ in
                 withAnimation(.spring(response: 0.25, dampingFraction: 0.5)) {
                     activeIndex = (activeIndex + 1) % 3
                 }
             }
+        }
+        .onDisappear {
+            timer?.invalidate()
+            timer = nil
         }
     }
 }
@@ -381,6 +386,7 @@ struct ThinkingRow: View {
     let activity: String
     @EnvironmentObject var textSizeManager: TextSizeManager
     @State private var dotIndex = 0
+    @State private var timer: Timer?
 
     var body: some View {
         HStack(spacing: 10) {
@@ -400,11 +406,15 @@ struct ThinkingRow: View {
         }
         .padding(.vertical, 8)
         .onAppear {
-            Timer.scheduledTimer(withTimeInterval: 0.35, repeats: true) { _ in
+            timer = Timer.scheduledTimer(withTimeInterval: 0.35, repeats: true) { _ in
                 withAnimation(.easeInOut(duration: 0.25)) {
                     dotIndex = (dotIndex + 1) % 3
                 }
             }
+        }
+        .onDisappear {
+            timer?.invalidate()
+            timer = nil
         }
     }
 
