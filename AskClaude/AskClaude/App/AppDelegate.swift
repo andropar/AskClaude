@@ -4,6 +4,7 @@ import SwiftUI
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var ipcService: IPCService?
     private var statusItem: NSStatusItem?
+    private var windowBecomeKeyObserver: NSObjectProtocol?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Start IPC listener for Finder extension communication
@@ -24,7 +25,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         // Also listen for new windows
-        NotificationCenter.default.addObserver(
+        windowBecomeKeyObserver = NotificationCenter.default.addObserver(
             forName: NSWindow.didBecomeKeyNotification,
             object: nil,
             queue: .main
@@ -112,6 +113,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(_ notification: Notification) {
         ipcService?.stopListening()
+
+        if let observer = windowBecomeKeyObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
