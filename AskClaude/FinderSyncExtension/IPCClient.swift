@@ -10,6 +10,11 @@ class IPCClient {
             return false
         }
 
+        // Ensure port is invalidated after use to prevent resource leak
+        defer {
+            CFMessagePortInvalidate(remotePort)
+        }
+
         guard let data = path.data(using: .utf8) else {
             print("[IPCClient] Failed to encode path")
             return false

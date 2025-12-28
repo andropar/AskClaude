@@ -761,7 +761,7 @@ struct FilePreviewView: View {
             // 10MB limit for text files
             let maxTextFileSize: Int64 = 10 * 1024 * 1024
             let isTextFile = ["md", "markdown", "swift", "py", "python", "js", "javascript",
-                             "ts", "typescript", "json", "xml", "html", "htm", "txt", "log", "css"].contains(ext)
+                             "ts", "typescript", "json", "xml", "html", "htm", "txt", "log", "css", "csv"].contains(ext)
 
             if isTextFile && fileSize > maxTextFileSize {
                 loadError = "File too large (\(ByteCountFormatter.string(fromByteCount: fileSize, countStyle: .file))). Maximum size for text preview is \(ByteCountFormatter.string(fromByteCount: maxTextFileSize, countStyle: .file))"
