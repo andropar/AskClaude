@@ -339,6 +339,7 @@ class ChatSession: ObservableObject, Identifiable {
 class SessionManager: ObservableObject {
     @Published var sessions: [ChatSession] = []
     @Published var activeSessionId: UUID?
+    private var folderOpenObserver: NSObjectProtocol?
 
     var activeSession: ChatSession? {
         sessions.first { $0.id == activeSessionId }
@@ -346,7 +347,7 @@ class SessionManager: ObservableObject {
 
     init() {
         // Listen for folder open notifications from IPC/URL scheme
-        NotificationCenter.default.addObserver(
+        folderOpenObserver = NotificationCenter.default.addObserver(
             forName: .openSessionForFolder,
             object: nil,
             queue: .main
@@ -357,6 +358,12 @@ class SessionManager: ObservableObject {
                     await self?.createSession(for: path, selectedItem: selectedItem)
                 }
             }
+        }
+    }
+
+    deinit {
+        if let observer = folderOpenObserver {
+            NotificationCenter.default.removeObserver(observer)
         }
     }
 

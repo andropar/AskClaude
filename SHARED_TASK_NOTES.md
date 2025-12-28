@@ -2,19 +2,25 @@
 
 ## Recent Work (2025-12-28)
 
-### Latest Fix - Streaming Message State Bugs (NEWEST)
+### Latest Fix - NotificationCenter Observer Leaks (NEWEST)
+**Missing observer cleanup** (ChatSession.swift:342-368, AppDelegate.swift:7,28-34,114-120)
+1. **SessionManager observer leak** - NotificationCenter observer never removed
+   - Added `folderOpenObserver` property to store observer reference
+   - Added `deinit` method to properly remove observer on deallocation
+   - Prevents potential memory leaks and duplicate notifications
+
+2. **AppDelegate observer leak** - Window notification observer never removed
+   - Added `windowBecomeKeyObserver` property to store observer reference
+   - Cleanup now happens in `applicationWillTerminate`
+   - Follows best practices for NotificationCenter observer management
+
+### Earlier Fix - Streaming Message State Bugs
 **Streaming messages not marked complete** (ChatSession.swift:134-150, 261-282)
 1. **Bug in `stop()` method** - Streaming messages remained in streaming state when session stopped
-   - The `stop()` method cleared `currentStreamingMessageId` without marking the message as complete
-   - This was inconsistent with `interrupt()` which properly marked messages complete
    - Fixed: Now marks any streaming message as `isStreaming: false` before clearing state
-   - Prevents UI showing perpetual "typing..." indicator after session stops
 
 2. **Bug in `result` event handler** - Missing safety check for streaming messages
-   - If `contentBlockStop` event was missed/delayed, message would remain streaming forever
-   - The `result` event cleared `currentStreamingMessageId` without finalizing the message
    - Fixed: Added safety check to mark streaming message complete before clearing state
-   - Ensures all messages are finalized when conversation turn completes
 
 ### Earlier Fixes - Resource Leaks and File Size Limits
 **CSV file size limit missing** (MarkdownContentView.swift:764)
