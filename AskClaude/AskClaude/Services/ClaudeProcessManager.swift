@@ -179,9 +179,15 @@ class ClaudeProcessManager: ObservableObject {
             if var jsonString = String(data: data, encoding: .utf8) {
                 jsonString += "\n"
                 if let inputData = jsonString.data(using: .utf8) {
-                    stdinPipe.fileHandleForWriting.write(inputData)
-                    isProcessing = true
-                    print("[ClaudeProcessManager] Sent message: \(message.prefix(50))...")
+                    // Wrap write in try-catch to handle potential race condition
+                    // where session is stopped between isRunning check and write
+                    do {
+                        try stdinPipe.fileHandleForWriting.write(contentsOf: inputData)
+                        isProcessing = true
+                        print("[ClaudeProcessManager] Sent message: \(message.prefix(50))...")
+                    } catch {
+                        print("[ClaudeProcessManager] Failed to write message to pipe (session may have stopped): \(error)")
+                    }
                 }
             }
         } catch {
@@ -216,8 +222,14 @@ class ClaudeProcessManager: ObservableObject {
             if var jsonString = String(data: data, encoding: .utf8) {
                 jsonString += "\n"
                 if let inputData = jsonString.data(using: .utf8) {
-                    stdinPipe.fileHandleForWriting.write(inputData)
-                    print("[ClaudeProcessManager] Sent permission response: \(allow ? "ALLOW" : "DENY")")
+                    // Wrap write in try-catch to handle potential race condition
+                    // where session is stopped between isRunning check and write
+                    do {
+                        try stdinPipe.fileHandleForWriting.write(contentsOf: inputData)
+                        print("[ClaudeProcessManager] Sent permission response: \(allow ? "ALLOW" : "DENY")")
+                    } catch {
+                        print("[ClaudeProcessManager] Failed to write permission response to pipe (session may have stopped): \(error)")
+                    }
                 }
             }
         } catch {

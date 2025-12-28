@@ -2,7 +2,16 @@
 
 ## Recent Work (2025-12-28)
 
-### Latest Fix - Session State Management
+### Latest Fix - Race Condition in Pipe Writes
+**Race condition when writing to stdin pipe** (ClaudeProcessManager.swift:161-238)
+- Fixed potential crash when session stops during message send
+- Problem: Code checked `isRunning` then wrote to pipe in two non-atomic operations
+- Race condition: Session could be stopped (closing pipes) between check and write, causing crash
+- Solution: Wrapped `FileHandle.write()` calls in try-catch blocks
+- Now gracefully handles write failures with error logging instead of crashing
+- Affects both `sendMessage()` and `sendPermissionResponse()` methods
+
+### Earlier Fix - Session State Management
 **Incomplete state cleanup in ChatSession** (ChatSession.swift:134-158)
 1. **Fixed `interrupt()` method** - Now properly cleans up streaming state before adding interrupt message
    - Marks streaming messages as complete before resetting
