@@ -2,7 +2,21 @@
 
 ## Recent Work (2025-12-28)
 
-### Latest Fixes - Resource Leaks and File Size Limits
+### Latest Fix - Streaming Message State Bugs (NEWEST)
+**Streaming messages not marked complete** (ChatSession.swift:134-150, 261-282)
+1. **Bug in `stop()` method** - Streaming messages remained in streaming state when session stopped
+   - The `stop()` method cleared `currentStreamingMessageId` without marking the message as complete
+   - This was inconsistent with `interrupt()` which properly marked messages complete
+   - Fixed: Now marks any streaming message as `isStreaming: false` before clearing state
+   - Prevents UI showing perpetual "typing..." indicator after session stops
+
+2. **Bug in `result` event handler** - Missing safety check for streaming messages
+   - If `contentBlockStop` event was missed/delayed, message would remain streaming forever
+   - The `result` event cleared `currentStreamingMessageId` without finalizing the message
+   - Fixed: Added safety check to mark streaming message complete before clearing state
+   - Ensures all messages are finalized when conversation turn completes
+
+### Earlier Fixes - Resource Leaks and File Size Limits
 **CSV file size limit missing** (MarkdownContentView.swift:764)
 - CSV files were not included in the 10MB size limit check for text files
 - Large CSV files (1GB+) could be loaded entirely into memory, causing crashes
