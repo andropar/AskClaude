@@ -2,7 +2,22 @@
 
 ## Recent Work (2025-12-28)
 
-### Latest Fix - NotificationCenter Observer Leaks (NEWEST)
+### Latest Progress - Testing Infrastructure Added (NEWEST)
+**Test files created for ClaudeOutputParser** (AskClaudeTests/ClaudeOutputParserTests.swift)
+- Created comprehensive unit test suite with 21 test cases covering:
+  - System event parsing
+  - Assistant message parsing (text and tool use)
+  - User message parsing
+  - Result event parsing (success and error cases)
+  - Content block events (start, delta, stop)
+  - Permission request parsing
+  - Edge cases (invalid JSON, unknown types, missing fields)
+  - Multiple content types in single message
+- Tests ready to be added to Xcode project
+- Setup script provided at `AskClaude/setup_tests.sh` with instructions
+- **Next step**: Add test target to Xcode project and run tests (see setup_tests.sh)
+
+### Earlier Fix - NotificationCenter Observer Leaks
 **Missing observer cleanup** (ChatSession.swift:342-368, AppDelegate.swift:7,28-34,114-120)
 1. **SessionManager observer leak** - NotificationCenter observer never removed
    - Added `folderOpenObserver` property to store observer reference
@@ -97,11 +112,12 @@
 
 ### Priority Improvements for Next Iteration
 
-1. **Testing Infrastructure** (HIGH PRIORITY)
-   - No unit tests currently exist - critical for preventing regressions
-   - Add tests for ClaudeOutputParser JSON parsing (handles complex stream-json)
-   - Add tests for ChatSession message handling
-   - Add tests for file browser path navigation logic
+1. **Testing Infrastructure** (IN PROGRESS)
+   - ✅ ClaudeOutputParser tests created (21 test cases)
+   - ⏳ Add test target to Xcode project (manual step required - see setup_tests.sh)
+   - 📝 TODO: Add tests for ChatSession message handling
+   - 📝 TODO: Add tests for file browser path navigation logic
+   - 📝 TODO: Add tests for ClaudeProcessManager
 
 2. **Error Handling**
    - Error messages only logged, not shown to users
