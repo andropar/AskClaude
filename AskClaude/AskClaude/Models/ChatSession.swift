@@ -63,6 +63,7 @@ class ChatSession: ObservableObject, Identifiable {
     private var currentStreamingMessageId: UUID?
     private var currentBlockType: ContentBlockStartEvent.BlockType?
     private var hasSentInitialContext = false
+    private var errorObserver: AnyCancellable?
 
     struct SessionInfo {
         let model: String
@@ -92,6 +93,14 @@ class ChatSession: ObservableObject, Identifiable {
         let manager = ClaudeProcessManager()
         self.processManager = manager
         setupEventHandler()
+
+        // Observe process manager errors and propagate them to session
+        errorObserver = manager.$error
+            .sink { [weak self] managerError in
+                if let managerError = managerError {
+                    self?.error = managerError
+                }
+            }
 
         do {
             try await manager.startSession(in: folderPath, model: selectedModel.rawValue)
@@ -174,6 +183,10 @@ class ChatSession: ObservableObject, Identifiable {
     func clearHistory() {
         messages.removeAll()
         persistence.clearHistory(for: folderPath)
+    }
+
+    func clearError() {
+        error = nil
     }
 
     private func saveHistory() {
