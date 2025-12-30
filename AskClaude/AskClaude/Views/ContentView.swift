@@ -195,24 +195,14 @@ struct WorkspaceRow: View {
 struct ChatRow: View {
     @EnvironmentObject var sessionManager: SessionManager
     @EnvironmentObject var textSizeManager: TextSizeManager
-    let session: ChatSession
+    @ObservedObject var session: ChatSession
 
     @State private var isHovered = false
+    @State private var isRenaming = false
+    @State private var renameText = ""
 
     private var isActive: Bool {
         sessionManager.activeSessionId == session.id
-    }
-
-    private var chatTitle: String {
-        if let firstMessage = session.messages.first(where: { $0.role == .user }) {
-            let content = firstMessage.content
-            let maxLength = 30
-            if content.count > maxLength {
-                return String(content.prefix(maxLength)) + "..."
-            }
-            return content
-        }
-        return "New chat"
     }
 
     private var timeAgo: String {
@@ -234,10 +224,25 @@ struct ChatRow: View {
                     .foregroundStyle(isActive ? Color(hex: "E85D04") : Color(hex: "999999"))
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(chatTitle)
-                        .font(.system(size: textSizeManager.scaled(11)))
-                        .foregroundStyle(isActive ? Color(hex: "1A1A1A") : Color(hex: "555555"))
-                        .lineLimit(1)
+                    if isRenaming {
+                        TextField("Chat name", text: $renameText, onCommit: commitRename)
+                            .textFieldStyle(.plain)
+                            .font(.system(size: textSizeManager.scaled(11)))
+                            .foregroundStyle(Color(hex: "1A1A1A"))
+                            .padding(.horizontal, 4)
+                            .padding(.vertical, 2)
+                            .background(
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Color.white)
+                                    .shadow(color: Color.black.opacity(0.1), radius: 2, y: 1)
+                            )
+                            .onExitCommand(perform: cancelRename)
+                    } else {
+                        Text(session.displayTitle)
+                            .font(.system(size: textSizeManager.scaled(11)))
+                            .foregroundStyle(isActive ? Color(hex: "1A1A1A") : Color(hex: "555555"))
+                            .lineLimit(1)
+                    }
 
                     Text(timeAgo)
                         .font(.system(size: 9))
@@ -247,7 +252,7 @@ struct ChatRow: View {
                 Spacer()
 
                 // Close button on hover
-                if isHovered {
+                if isHovered && !isRenaming {
                     Button(action: { sessionManager.closeSession(session) }) {
                         Image(systemName: "xmark")
                             .font(.system(size: 9, weight: .semibold))
@@ -272,7 +277,42 @@ struct ChatRow: View {
                 isHovered = hovering
             }
         }
+        .contextMenu {
+            Button(action: startRename) {
+                Label("Rename", systemImage: "pencil")
+            }
+            if session.customName != nil {
+                Button(action: clearCustomName) {
+                    Label("Reset Name", systemImage: "arrow.counterclockwise")
+                }
+            }
+            Divider()
+            Button(role: .destructive, action: { sessionManager.closeSession(session) }) {
+                Label("Close", systemImage: "xmark")
+            }
+        }
         .padding(.horizontal, 8)
+    }
+
+    private func startRename() {
+        renameText = session.customName ?? session.displayTitle
+        isRenaming = true
+    }
+
+    private func commitRename() {
+        let trimmed = renameText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !trimmed.isEmpty {
+            session.rename(to: trimmed)
+        }
+        isRenaming = false
+    }
+
+    private func cancelRename() {
+        isRenaming = false
+    }
+
+    private func clearCustomName() {
+        session.rename(to: nil)
     }
 }
 

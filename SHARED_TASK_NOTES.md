@@ -1,8 +1,19 @@
 # Shared Task Notes
 
-## Recent Work (2025-12-28)
+## Recent Work (2025-12-31)
 
-### Latest Progress - Testing Infrastructure Added (NEWEST)
+### Latest Progress - Session Renaming Feature (NEWEST)
+**Added ability to rename chat sessions** (ChatSession.swift, ContentView.swift)
+- Added `customName` property to ChatSession for user-defined session names
+- Added `displayTitle` computed property that shows custom name or auto-generated title
+- Added `rename(to:)` method for changing session names
+- Updated ChatRow to use `@ObservedObject` for reactive name updates
+- Added context menu with "Rename" and "Reset Name" options
+- Added inline text field editing when renaming
+- Escape key cancels rename, Enter commits
+- Names persist during app session (not across app restarts - would require architectural changes)
+
+### Earlier Progress - Testing Infrastructure Added
 **Test files created for ClaudeOutputParser** (AskClaudeTests/ClaudeOutputParserTests.swift)
 - Created comprehensive unit test suite with 21 test cases covering:
   - System event parsing
@@ -131,8 +142,9 @@
 
 4. **Session Management**
    - Persist chat history between app launches
-   - Add ability to rename sessions
+   - ✅ Session renaming added (in-session only, see latest progress)
    - Export chat history feature
+   - Persist session names across app restarts (requires architectural changes)
 
 5. **File Browser Improvements**
    - Add file watching/refresh when files change externally

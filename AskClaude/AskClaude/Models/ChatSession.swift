@@ -50,6 +50,7 @@ class ChatSession: ObservableObject, Identifiable {
     @Published var sessionInfo: SessionInfo?
     @Published var pendingPermission: PermissionRequest?
     @Published var selectedModel: ClaudeModel = .haiku
+    @Published var customName: String?  // User-defined session name
 
     struct PermissionRequest: Identifiable {
         let id: String
@@ -174,6 +175,28 @@ class ChatSession: ObservableObject, Identifiable {
     func clearHistory() {
         messages.removeAll()
         persistence.clearHistory(for: folderPath)
+    }
+
+    /// Returns the display title for the session (custom name or auto-generated from first message)
+    var displayTitle: String {
+        if let name = customName, !name.isEmpty {
+            return name
+        }
+        // Auto-generate from first user message
+        if let firstMessage = messages.first(where: { $0.role == .user }) {
+            let content = firstMessage.content
+            let maxLength = 30
+            if content.count > maxLength {
+                return String(content.prefix(maxLength)) + "..."
+            }
+            return content
+        }
+        return "New chat"
+    }
+
+    /// Rename the session with a custom name
+    func rename(to name: String?) {
+        customName = name?.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     private func saveHistory() {
