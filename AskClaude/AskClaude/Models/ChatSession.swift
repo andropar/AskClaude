@@ -63,6 +63,7 @@ class ChatSession: ObservableObject, Identifiable {
     private var currentStreamingMessageId: UUID?
     private var currentBlockType: ContentBlockStartEvent.BlockType?
     private var hasSentInitialContext = false
+    private var errorObservation: AnyCancellable?
 
     struct SessionInfo {
         let model: String
@@ -85,6 +86,15 @@ class ChatSession: ObservableObject, Identifiable {
                 self?.handleEvent(event)
             }
         }
+
+        // Observe process manager errors (e.g., process crashes, exit codes)
+        errorObservation = processManager?.$error
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] errorMessage in
+                if let errorMessage = errorMessage {
+                    self?.error = errorMessage
+                }
+            }
     }
 
     func start() async {
@@ -132,6 +142,10 @@ class ChatSession: ObservableObject, Identifiable {
     }
 
     func stop() {
+        // Cancel error observation before stopping to prevent stale updates
+        errorObservation?.cancel()
+        errorObservation = nil
+
         processManager?.stopSession()
 
         // Mark any streaming message as complete before resetting

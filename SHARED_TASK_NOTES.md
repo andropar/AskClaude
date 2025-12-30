@@ -1,8 +1,18 @@
 # Shared Task Notes
 
-## Recent Work (2025-12-28)
+## Recent Work (2025-12-31)
 
-### Latest Progress - Testing Infrastructure Added (NEWEST)
+### Latest Progress - User-Facing Error Display (NEWEST)
+**Error messages now shown to users** (ChatView.swift:92-112, ChatSession.swift:66,83-97,144-147)
+- ErrorBanner component was defined but never used - now wired up to display `session.error`
+- Banner appears above the input bar with dismiss button
+- Spring animation for smooth appearance/disappearance
+- Added Combine observation to propagate ClaudeProcessManager errors to ChatSession
+  - Process crashes, exit codes, and buffer overflow errors now visible to users
+  - `errorObservation` property properly cleaned up in `stop()` method
+- Users will now see errors for: auth failures, process crashes, malformed output, etc.
+
+### Earlier - Testing Infrastructure Added
 **Test files created for ClaudeOutputParser** (AskClaudeTests/ClaudeOutputParserTests.swift)
 - Created comprehensive unit test suite with 21 test cases covering:
   - System event parsing
@@ -120,9 +130,9 @@
    - 📝 TODO: Add tests for ClaudeProcessManager
 
 2. **Error Handling**
-   - Error messages only logged, not shown to users
-   - Add user-facing alert dialogs for errors (auth failures, process crashes)
-   - Add retry logic for Claude CLI connection failures
+   - ✅ Error messages now shown to users via ErrorBanner
+   - ✅ Process-level errors propagated to ChatSession
+   - 📝 TODO: Add retry logic for Claude CLI connection failures
 
 3. **Code Organization**
    - MarkdownContentView.swift: 1,186 lines (extract ImageBlockView, FilePreviewView, etc.)
