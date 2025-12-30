@@ -32,6 +32,30 @@ struct ChatView: View {
                     showingFiles: showFileBrowser
                 )
 
+                // Error banner
+                if let errorMessage = session.error {
+                    ErrorBanner(
+                        message: errorMessage,
+                        onRetry: {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                session.error = nil
+                            }
+                            Task {
+                                await session.retry()
+                            }
+                        },
+                        onDismiss: {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                session.error = nil
+                            }
+                        }
+                    )
+                    .padding(.horizontal, 16)
+                    .padding(.top, 8)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .animation(.spring(response: 0.3, dampingFraction: 0.8), value: session.error)
+                }
+
                 // Messages
                 ScrollViewReader { proxy in
                     ScrollView {
@@ -537,28 +561,85 @@ struct PermissionRequestView: View {
 
 struct ErrorBanner: View {
     let message: String
+    var onRetry: (() -> Void)? = nil
     let onDismiss: () -> Void
     @EnvironmentObject var textSizeManager: TextSizeManager
 
+    // Determine if this is a recoverable error that shows retry
+    private var isRecoverableError: Bool {
+        message.lowercased().contains("not found") ||
+        message.lowercased().contains("not running") ||
+        message.lowercased().contains("launch") ||
+        message.lowercased().contains("exit")
+    }
+
+    // Get a user-friendly message and help text
+    private var displayInfo: (message: String, helpText: String?) {
+        if message.contains("Claude CLI not found") {
+            return (
+                "Claude CLI not found",
+                "Install Claude Code by running: npm install -g @anthropic-ai/claude-code"
+            )
+        } else if message.contains("not authenticated") || message.contains("sign in") {
+            return (
+                "Not signed in to Claude",
+                "Run 'claude' in Terminal to authenticate"
+            )
+        } else if message.contains("exit") {
+            return (
+                "Claude process stopped unexpectedly",
+                nil
+            )
+        }
+        return (message, nil)
+    }
+
     var body: some View {
-        HStack(spacing: 10) {
-            Image(systemName: "exclamationmark.triangle.fill")
-                .font(.system(size: textSizeManager.scaled(13)))
-                .foregroundStyle(Color(hex: "E85D04"))
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 10) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.system(size: textSizeManager.scaled(13)))
+                    .foregroundStyle(Color(hex: "E85D04"))
 
-            Text(message)
-                .font(.system(size: textSizeManager.scaled(13)))
-                .foregroundStyle(Color(hex: "555555"))
-                .lineLimit(1)
+                Text(displayInfo.message)
+                    .font(.system(size: textSizeManager.scaled(13), weight: .medium))
+                    .foregroundStyle(Color(hex: "444444"))
+                    .lineLimit(2)
 
-            Spacer()
+                Spacer()
 
-            Button(action: onDismiss) {
-                Image(systemName: "xmark")
-                    .font(.system(size: textSizeManager.scaled(11), weight: .semibold))
-                    .foregroundStyle(Color(hex: "888888"))
+                if let retry = onRetry, isRecoverableError {
+                    Button(action: retry) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "arrow.clockwise")
+                                .font(.system(size: textSizeManager.scaled(10)))
+                            Text("Retry")
+                                .font(.system(size: textSizeManager.scaled(11), weight: .medium))
+                        }
+                        .foregroundStyle(Color(hex: "E85D04"))
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .background(Color(hex: "FFFFFF"))
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                    }
+                    .buttonStyle(.plain)
+                }
+
+                Button(action: onDismiss) {
+                    Image(systemName: "xmark")
+                        .font(.system(size: textSizeManager.scaled(11), weight: .semibold))
+                        .foregroundStyle(Color(hex: "888888"))
+                }
+                .buttonStyle(.plain)
             }
-            .buttonStyle(.plain)
+
+            // Help text for actionable errors
+            if let helpText = displayInfo.helpText {
+                Text(helpText)
+                    .font(.system(size: textSizeManager.scaled(11), design: .monospaced))
+                    .foregroundStyle(Color(hex: "777777"))
+                    .padding(.leading, 26)
+            }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)

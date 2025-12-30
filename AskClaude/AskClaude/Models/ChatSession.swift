@@ -63,6 +63,7 @@ class ChatSession: ObservableObject, Identifiable {
     private var currentStreamingMessageId: UUID?
     private var currentBlockType: ContentBlockStartEvent.BlockType?
     private var hasSentInitialContext = false
+    private var errorObservation: AnyCancellable?
 
     struct SessionInfo {
         let model: String
@@ -75,8 +76,14 @@ class ChatSession: ObservableObject, Identifiable {
         self.folderName = (folderPath as NSString).lastPathComponent
         self.selectedItem = selectedItem
 
-        // Start with empty messages - each session is a fresh chat
-        self.messages = []
+        // Load existing chat history for this workspace
+        let loadedMessages = persistence.loadMessages(for: folderPath)
+        self.messages = loadedMessages
+
+        // If we loaded existing messages, we've already sent initial context in a previous session
+        if !loadedMessages.isEmpty {
+            self.hasSentInitialContext = true
+        }
     }
 
     private func setupEventHandler() {
@@ -92,12 +99,35 @@ class ChatSession: ObservableObject, Identifiable {
         let manager = ClaudeProcessManager()
         self.processManager = manager
         setupEventHandler()
+        setupErrorHandler()
 
         do {
             try await manager.startSession(in: folderPath, model: selectedModel.rawValue)
         } catch {
             self.error = error.localizedDescription
         }
+    }
+
+    /// Retry starting the session after an error
+    func retry() async {
+        // Stop any existing session first
+        stop()
+        error = nil
+
+        // Wait a moment before retrying
+        try? await Task.sleep(nanoseconds: 300_000_000) // 300ms
+
+        await start()
+    }
+
+    private func setupErrorHandler() {
+        // Observe process manager errors and forward them to the session
+        errorObservation = processManager?.$error
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] errorMessage in
+                self?.error = errorMessage
+            }
     }
 
     func sendMessage(_ content: String) {
@@ -132,6 +162,10 @@ class ChatSession: ObservableObject, Identifiable {
     }
 
     func stop() {
+        // Cancel error observation
+        errorObservation?.cancel()
+        errorObservation = nil
+
         processManager?.stopSession()
 
         // Mark any streaming message as complete before resetting
