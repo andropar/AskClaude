@@ -92,11 +92,27 @@ class ChatSession: ObservableObject, Identifiable {
         let manager = ClaudeProcessManager()
         self.processManager = manager
         setupEventHandler()
+        setupCrashHandler()
 
         do {
             try await manager.startSession(in: folderPath, model: selectedModel.rawValue)
         } catch {
             self.error = error.localizedDescription
+            // Show alert for critical errors (not found, auth issues)
+            AlertManager.shared.showSessionStartError(error: error, folderPath: folderPath)
+        }
+    }
+
+    private func setupCrashHandler() {
+        processManager?.onProcessCrash = { [weak self] exitCode in
+            guard let self = self else { return }
+            Task { @MainActor in
+                // Only show crash alert for non-normal terminations
+                // Exit code 0 is normal, 130 (SIGINT) is normal interrupt
+                if exitCode != 0 && exitCode != 130 {
+                    AlertManager.shared.showProcessCrashError(exitCode: exitCode, folderPath: self.folderPath)
+                }
+            }
         }
     }
 

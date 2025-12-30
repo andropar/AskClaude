@@ -90,13 +90,26 @@ struct ChatView: View {
                 Spacer(minLength: 0)
             }
             .overlay(alignment: .bottom) {
-                InputBar(
-                    text: $inputText,
-                    isDisabled: session.isProcessing,
-                    onSend: sendMessage
-                )
-                .focused($isInputFocused)
+                VStack(spacing: 8) {
+                    // Error banner when session has an error
+                    if let error = session.error {
+                        ErrorBanner(
+                            message: error,
+                            onDismiss: { session.error = nil }
+                        )
+                        .padding(.horizontal, 28)
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                    }
+
+                    InputBar(
+                        text: $inputText,
+                        isDisabled: session.isProcessing,
+                        onSend: sendMessage
+                    )
+                    .focused($isInputFocused)
+                }
             }
+            .animation(.spring(response: 0.3, dampingFraction: 0.8), value: session.error != nil)
             .background(Color(hex: "FAFAF8"))
 
             // File browser

@@ -1,8 +1,29 @@
 # Shared Task Notes
 
-## Recent Work (2025-12-28)
+## Recent Work (2025-12-31)
 
-### Latest Progress - Testing Infrastructure Added (NEWEST)
+### Latest Progress - User-Facing Error Handling (NEWEST)
+**Added error alerts and banners for user visibility** (AlertManager.swift, ChatSession.swift, ChatView.swift)
+1. **Created AlertManager service** (`Services/AlertManager.swift`)
+   - Centralized NSAlert dialog management
+   - Specific handlers for: CLI not found, auth failures, process crashes
+   - Action buttons (e.g., "Download Claude Code", "Open Terminal")
+
+2. **Integrated error banner in ChatView** (ChatView.swift:92-113)
+   - Shows dismissible error banner above input bar when session has error
+   - Uses existing `ErrorBanner` component (was already defined but unused)
+   - Animated transition when errors appear/disappear
+
+3. **Added process crash detection** (ChatSession.swift:106-117, ClaudeProcessManager.swift:22,320-323)
+   - New `onProcessCrash` callback in ClaudeProcessManager
+   - ChatSession shows alert when Claude exits abnormally (excludes normal exits and SIGINT)
+   - Session start errors now show appropriate dialogs
+
+**Result**: Users now see clear error messages for CLI issues, auth problems, and crashes instead of silent failures.
+
+## Earlier Work (2025-12-28)
+
+### Testing Infrastructure Added
 **Test files created for ClaudeOutputParser** (AskClaudeTests/ClaudeOutputParserTests.swift)
 - Created comprehensive unit test suite with 21 test cases covering:
   - System event parsing
@@ -119,10 +140,10 @@
    - 📝 TODO: Add tests for file browser path navigation logic
    - 📝 TODO: Add tests for ClaudeProcessManager
 
-2. **Error Handling**
-   - Error messages only logged, not shown to users
-   - Add user-facing alert dialogs for errors (auth failures, process crashes)
-   - Add retry logic for Claude CLI connection failures
+2. **Error Handling** (MOSTLY COMPLETE)
+   - ✅ User-facing alert dialogs for auth failures, process crashes
+   - ✅ Error banner in ChatView for session errors
+   - 📝 TODO: Add retry logic for Claude CLI connection failures
 
 3. **Code Organization**
    - MarkdownContentView.swift: 1,186 lines (extract ImageBlockView, FilePreviewView, etc.)

@@ -26,6 +26,7 @@
 		AAA000014 /* ClaudeProcessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100014 /* ClaudeProcessManager.swift */; };
 		AAA000015 /* IPCService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100015 /* IPCService.swift */; };
 		AAA000017 /* ChatPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100019 /* ChatPersistence.swift */; };
+		AAA000022 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100022 /* AlertManager.swift */; };
 		AAA000016 /* AppGroupConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100016 /* AppGroupConfig.swift */; };
 		BBB000001 /* FinderSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB100001 /* FinderSync.swift */; };
 		BBB000002 /* IPCClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB100002 /* IPCClient.swift */; };
@@ -77,6 +78,7 @@
 		AAA100014 /* ClaudeProcessManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeProcessManager.swift; sourceTree = "<group>"; };
 		AAA100015 /* IPCService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPCService.swift; sourceTree = "<group>"; };
 		AAA100019 /* ChatPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatPersistence.swift; sourceTree = "<group>"; };
+		AAA100022 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		AAA100016 /* AppGroupConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroupConfig.swift; sourceTree = "<group>"; };
 		AAA100017 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AAA100018 /* AskClaude.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AskClaude.entitlements; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				AAA100014 /* ClaudeProcessManager.swift */,
 				AAA100015 /* IPCService.swift */,
 				AAA100019 /* ChatPersistence.swift */,
+				AAA100022 /* AlertManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -329,6 +332,7 @@
 				AAA000014 /* ClaudeProcessManager.swift in Sources */,
 				AAA000015 /* IPCService.swift in Sources */,
 				AAA000017 /* ChatPersistence.swift in Sources */,
+				AAA000022 /* AlertManager.swift in Sources */,
 				AAA000016 /* AppGroupConfig.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
