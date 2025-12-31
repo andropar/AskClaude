@@ -19,6 +19,7 @@ class ClaudeProcessManager: ObservableObject {
     private let maxBufferSize = 10 * 1024 * 1024
 
     var onEvent: ((ClaudeEvent) -> Void)?
+    var onError: ((String) -> Void)?
 
     /// Find the claude CLI executable
     private var claudePath: String? {
@@ -281,7 +282,9 @@ class ClaudeProcessManager: ObservableObject {
             print("[ClaudeProcessManager] ERROR: Output buffer exceeded \(maxBufferSize) bytes without newline. Clearing buffer to prevent memory issues.")
             print("[ClaudeProcessManager] Buffer preview: \(outputBuffer.prefix(200))...")
             outputBuffer = ""
-            error = "Received malformed output from Claude process (no newlines)"
+            let errorMessage = "Received malformed output from Claude process (no newlines)"
+            error = errorMessage
+            onError?(errorMessage)
             return
         }
 
@@ -317,7 +320,9 @@ class ClaudeProcessManager: ObservableObject {
         isProcessing = false
 
         if exitCode != 0 {
-            error = "Claude process exited with code \(exitCode)"
+            let errorMessage = "Claude process exited unexpectedly (code \(exitCode))"
+            error = errorMessage
+            onError?(errorMessage)
         }
     }
 }

@@ -32,6 +32,17 @@ struct ChatView: View {
                     showingFiles: showFileBrowser
                 )
 
+                // Error banner
+                if let errorMessage = session.error {
+                    ErrorBanner(
+                        message: errorMessage,
+                        onDismiss: { session.error = nil }
+                    )
+                    .padding(.horizontal, 20)
+                    .padding(.top, 8)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                }
+
                 // Messages
                 ScrollViewReader { proxy in
                     ScrollView {
