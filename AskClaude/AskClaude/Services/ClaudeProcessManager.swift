@@ -19,6 +19,7 @@ class ClaudeProcessManager: ObservableObject {
     private let maxBufferSize = 10 * 1024 * 1024
 
     var onEvent: ((ClaudeEvent) -> Void)?
+    var onError: ((String) -> Void)?
 
     /// Find the claude CLI executable
     private var claudePath: String? {
@@ -317,7 +318,9 @@ class ClaudeProcessManager: ObservableObject {
         isProcessing = false
 
         if exitCode != 0 {
-            error = "Claude process exited with code \(exitCode)"
+            let errorMessage = "Claude process exited unexpectedly (code \(exitCode))"
+            error = errorMessage
+            onError?(errorMessage)
         }
     }
 }

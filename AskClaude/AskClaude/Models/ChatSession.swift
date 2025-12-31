@@ -85,6 +85,14 @@ class ChatSession: ObservableObject, Identifiable {
                 self?.handleEvent(event)
             }
         }
+        processManager?.onError = { [weak self] errorMessage in
+            Task { @MainActor [weak self] in
+                self?.error = errorMessage
+                self?.isProcessing = false
+                self?.isThinking = false
+                self?.currentActivity = nil
+            }
+        }
     }
 
     func start() async {
@@ -95,9 +103,17 @@ class ChatSession: ObservableObject, Identifiable {
 
         do {
             try await manager.startSession(in: folderPath, model: selectedModel.rawValue)
+            // Clear any previous error on successful start
+            self.error = nil
         } catch {
             self.error = error.localizedDescription
         }
+    }
+
+    /// Retry starting the session after an error
+    func retry() async {
+        error = nil
+        await start()
     }
 
     func sendMessage(_ content: String) {

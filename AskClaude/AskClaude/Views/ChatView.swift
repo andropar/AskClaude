@@ -32,6 +32,22 @@ struct ChatView: View {
                     showingFiles: showFileBrowser
                 )
 
+                // Error banner (if any)
+                if let errorMessage = session.error {
+                    ErrorBanner(
+                        message: errorMessage,
+                        onDismiss: { session.error = nil },
+                        onRetry: {
+                            Task {
+                                await session.retry()
+                            }
+                        }
+                    )
+                    .padding(.horizontal, 16)
+                    .padding(.top, 8)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                }
+
                 // Messages
                 ScrollViewReader { proxy in
                     ScrollView {
@@ -538,6 +554,7 @@ struct PermissionRequestView: View {
 struct ErrorBanner: View {
     let message: String
     let onDismiss: () -> Void
+    var onRetry: (() -> Void)? = nil
     @EnvironmentObject var textSizeManager: TextSizeManager
 
     var body: some View {
@@ -549,9 +566,24 @@ struct ErrorBanner: View {
             Text(message)
                 .font(.system(size: textSizeManager.scaled(13)))
                 .foregroundStyle(Color(hex: "555555"))
-                .lineLimit(1)
+                .lineLimit(2)
 
             Spacer()
+
+            if let retryAction = onRetry {
+                Button(action: retryAction) {
+                    Text("Retry")
+                        .font(.system(size: textSizeManager.scaled(11), weight: .medium))
+                        .foregroundStyle(Color(hex: "E85D04"))
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 4)
+                        .background(
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                .strokeBorder(Color(hex: "E85D04").opacity(0.5), lineWidth: 1)
+                        )
+                }
+                .buttonStyle(.plain)
+            }
 
             Button(action: onDismiss) {
                 Image(systemName: "xmark")
