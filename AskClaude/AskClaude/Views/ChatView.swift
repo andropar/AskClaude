@@ -1,6 +1,72 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
+// MARK: - Session Error
+
+/// Typed error representation for user-facing alerts
+enum SessionError: Identifiable {
+    case claudeNotFound
+    case notAuthenticated
+    case launchFailed(String)
+    case processExited(Int32)
+    case other(String)
+
+    var id: String {
+        switch self {
+        case .claudeNotFound: return "notFound"
+        case .notAuthenticated: return "notAuth"
+        case .launchFailed(let reason): return "launch-\(reason)"
+        case .processExited(let code): return "exit-\(code)"
+        case .other(let msg): return "other-\(msg)"
+        }
+    }
+
+    var message: String {
+        switch self {
+        case .claudeNotFound:
+            return "Claude CLI not found. Please ensure Claude Code is installed.\n\nInstall from: https://claude.ai/code"
+        case .notAuthenticated:
+            return "Not signed in to Claude Code. Please run 'claude' in Terminal to sign in."
+        case .launchFailed(let reason):
+            return "Failed to launch Claude: \(reason)"
+        case .processExited(let code):
+            return "Claude process exited unexpectedly with code \(code). This may be a temporary issue."
+        case .other(let msg):
+            return msg
+        }
+    }
+
+    var isRetryable: Bool {
+        switch self {
+        case .claudeNotFound, .notAuthenticated:
+            return false  // User needs to take action first
+        case .launchFailed, .processExited, .other:
+            return true  // May work on retry
+        }
+    }
+
+    static func from(_ errorString: String) -> SessionError {
+        if errorString.contains("Claude CLI not found") {
+            return .claudeNotFound
+        } else if errorString.contains("Not signed in") || errorString.contains("sign in") {
+            return .notAuthenticated
+        } else if errorString.contains("Failed to launch") {
+            let reason = errorString.replacingOccurrences(of: "Failed to launch Claude: ", with: "")
+            return .launchFailed(reason)
+        } else if errorString.contains("process exited with code") {
+            // Extract exit code from message like "Claude process exited with code 1"
+            if let range = errorString.range(of: "code "),
+               let codeStr = errorString[range.upperBound...].split(separator: " ").first,
+               let code = Int32(codeStr) {
+                return .processExited(code)
+            }
+            return .processExited(-1)
+        } else {
+            return .other(errorString)
+        }
+    }
+}
+
 struct ChatView: View {
     @ObservedObject var session: ChatSession
     @EnvironmentObject var textSizeManager: TextSizeManager
@@ -8,6 +74,8 @@ struct ChatView: View {
     @State private var inputText = ""
     @State private var appeared = false
     @State private var showFileBrowser = false
+    @State private var showErrorAlert = false
+    @State private var alertError: SessionError?
     @FocusState private var isInputFocused: Bool
     var onToggleSidebar: (() -> Void)?
 
@@ -90,12 +158,23 @@ struct ChatView: View {
                 Spacer(minLength: 0)
             }
             .overlay(alignment: .bottom) {
-                InputBar(
-                    text: $inputText,
-                    isDisabled: session.isProcessing,
-                    onSend: sendMessage
-                )
-                .focused($isInputFocused)
+                VStack(spacing: 8) {
+                    // Error banner (non-critical errors)
+                    if let error = session.error, !isCriticalError(error) {
+                        ErrorBanner(message: error, onDismiss: {
+                            session.error = nil
+                        })
+                        .padding(.horizontal, 20)
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                    }
+
+                    InputBar(
+                        text: $inputText,
+                        isDisabled: session.isProcessing,
+                        onSend: sendMessage
+                    )
+                    .focused($isInputFocused)
+                }
             }
             .background(Color(hex: "FAFAF8"))
 
@@ -116,6 +195,36 @@ struct ChatView: View {
                 appeared = true
             }
         }
+        .onChange(of: session.error) { _, newError in
+            // Show alert for critical errors
+            if let error = newError, isCriticalError(error) {
+                alertError = SessionError.from(error)
+                showErrorAlert = true
+            }
+        }
+        .alert("Session Error", isPresented: $showErrorAlert, presenting: alertError) { error in
+            Button("OK") {
+                session.error = nil
+            }
+            if error.isRetryable {
+                Button("Retry") {
+                    session.error = nil
+                    Task {
+                        await session.start()
+                    }
+                }
+            }
+        } message: { error in
+            Text(error.message)
+        }
+    }
+
+    /// Check if an error is critical and should show an alert instead of a banner
+    private func isCriticalError(_ error: String) -> Bool {
+        error.contains("Claude CLI not found") ||
+        error.contains("Not signed in") ||
+        error.contains("Failed to launch") ||
+        error.contains("process exited with code")
     }
 
     private func scrollToBottomNow(proxy: ScrollViewProxy) {

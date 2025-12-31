@@ -85,6 +85,12 @@ class ChatSession: ObservableObject, Identifiable {
                 self?.handleEvent(event)
             }
         }
+
+        processManager?.onError = { [weak self] errorMessage in
+            Task { @MainActor [weak self] in
+                self?.error = errorMessage
+            }
+        }
     }
 
     func start() async {

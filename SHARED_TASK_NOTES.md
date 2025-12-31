@@ -1,8 +1,36 @@
 # Shared Task Notes
 
-## Recent Work (2025-12-28)
+## Recent Work (2025-12-31)
 
-### Latest Progress - Testing Infrastructure Added (NEWEST)
+### Latest Progress - User-Facing Error Handling (NEWEST)
+**Implemented comprehensive error handling UI** (ChatView.swift, ClaudeProcessManager.swift)
+
+1. **Added SessionError enum** (ChatView.swift:7-67)
+   - Typed error representation with cases: claudeNotFound, notAuthenticated, launchFailed, processExited, other
+   - User-friendly messages with install links and instructions
+   - Determines which errors are retryable
+
+2. **Connected ErrorBanner to UI** (ChatView.swift:94-111)
+   - Already-existing ErrorBanner component is now wired up
+   - Shows for non-critical errors (can dismiss with X button)
+   - Transitions smoothly with animation
+
+3. **Added error alert for critical errors** (ChatView.swift:132-162)
+   - Alert dialog for: Claude CLI not found, authentication failures, process crashes
+   - Retry button for retryable errors
+   - Clear messaging about what went wrong and how to fix
+
+4. **Added onError callback to ClaudeProcessManager** (ClaudeProcessManager.swift:22)
+   - Errors now propagate from process manager to ChatSession
+   - Covers: process termination, pipe write failures, buffer overflow, encoding errors
+
+5. **ChatSession wired to receive errors** (ChatSession.swift:89-93)
+   - Sets up error callback in setupEventHandler()
+   - Errors flow from ClaudeProcessManager -> ChatSession -> ChatView UI
+
+## Previous Work (2025-12-28)
+
+### Testing Infrastructure Added
 **Test files created for ClaudeOutputParser** (AskClaudeTests/ClaudeOutputParserTests.swift)
 - Created comprehensive unit test suite with 21 test cases covering:
   - System event parsing
@@ -119,10 +147,12 @@
    - 📝 TODO: Add tests for file browser path navigation logic
    - 📝 TODO: Add tests for ClaudeProcessManager
 
-2. **Error Handling**
-   - Error messages only logged, not shown to users
-   - Add user-facing alert dialogs for errors (auth failures, process crashes)
-   - Add retry logic for Claude CLI connection failures
+2. **Error Handling** ✅ DONE
+   - ✅ User-facing error alerts implemented
+   - ✅ ErrorBanner wired up for non-critical errors
+   - ✅ Alert dialogs for critical errors (CLI not found, auth failures, crashes)
+   - ✅ Retry button for retryable errors
+   - ✅ Error propagation from ClaudeProcessManager to ChatSession to UI
 
 3. **Code Organization**
    - MarkdownContentView.swift: 1,186 lines (extract ImageBlockView, FilePreviewView, etc.)

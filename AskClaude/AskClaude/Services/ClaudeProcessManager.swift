@@ -19,6 +19,7 @@ class ClaudeProcessManager: ObservableObject {
     private let maxBufferSize = 10 * 1024 * 1024
 
     var onEvent: ((ClaudeEvent) -> Void)?
+    var onError: ((String) -> Void)?
 
     /// Find the claude CLI executable
     private var claudePath: String? {
@@ -187,11 +188,17 @@ class ClaudeProcessManager: ObservableObject {
                         print("[ClaudeProcessManager] Sent message: \(message.prefix(50))...")
                     } catch {
                         print("[ClaudeProcessManager] Failed to write message to pipe (session may have stopped): \(error)")
+                        let errorMessage = "Failed to send message to Claude (session may have stopped)"
+                        self.error = errorMessage
+                        onError?(errorMessage)
                     }
                 }
             }
         } catch {
             print("[ClaudeProcessManager] Failed to encode message: \(error)")
+            let errorMessage = "Failed to encode message: \(error.localizedDescription)"
+            self.error = errorMessage
+            onError?(errorMessage)
         }
     }
 
@@ -229,11 +236,17 @@ class ClaudeProcessManager: ObservableObject {
                         print("[ClaudeProcessManager] Sent permission response: \(allow ? "ALLOW" : "DENY")")
                     } catch {
                         print("[ClaudeProcessManager] Failed to write permission response to pipe (session may have stopped): \(error)")
+                        let errorMessage = "Failed to send permission response (session may have stopped)"
+                        self.error = errorMessage
+                        onError?(errorMessage)
                     }
                 }
             }
         } catch {
             print("[ClaudeProcessManager] Failed to encode permission response: \(error)")
+            let errorMessage = "Failed to encode permission response: \(error.localizedDescription)"
+            self.error = errorMessage
+            onError?(errorMessage)
         }
     }
 
@@ -281,7 +294,9 @@ class ClaudeProcessManager: ObservableObject {
             print("[ClaudeProcessManager] ERROR: Output buffer exceeded \(maxBufferSize) bytes without newline. Clearing buffer to prevent memory issues.")
             print("[ClaudeProcessManager] Buffer preview: \(outputBuffer.prefix(200))...")
             outputBuffer = ""
-            error = "Received malformed output from Claude process (no newlines)"
+            let errorMessage = "Received malformed output from Claude process (no newlines)"
+            error = errorMessage
+            onError?(errorMessage)
             return
         }
 
@@ -317,7 +332,9 @@ class ClaudeProcessManager: ObservableObject {
         isProcessing = false
 
         if exitCode != 0 {
-            error = "Claude process exited with code \(exitCode)"
+            let errorMessage = "Claude process exited with code \(exitCode)"
+            error = errorMessage
+            onError?(errorMessage)
         }
     }
 }
