@@ -63,6 +63,7 @@ class ChatSession: ObservableObject, Identifiable {
     private var currentStreamingMessageId: UUID?
     private var currentBlockType: ContentBlockStartEvent.BlockType?
     private var hasSentInitialContext = false
+    private var errorObserver: AnyCancellable?
 
     struct SessionInfo {
         let model: String
@@ -92,6 +93,13 @@ class ChatSession: ObservableObject, Identifiable {
         let manager = ClaudeProcessManager()
         self.processManager = manager
         setupEventHandler()
+
+        // Observe process manager errors (e.g., process termination)
+        errorObserver = manager.$error
+            .compactMap { $0 }
+            .sink { [weak self] processError in
+                self?.error = processError
+            }
 
         do {
             try await manager.startSession(in: folderPath, model: selectedModel.rawValue)
@@ -133,6 +141,8 @@ class ChatSession: ObservableObject, Identifiable {
 
     func stop() {
         processManager?.stopSession()
+        errorObserver?.cancel()
+        errorObserver = nil
 
         // Mark any streaming message as complete before resetting
         if let msgId = currentStreamingMessageId,

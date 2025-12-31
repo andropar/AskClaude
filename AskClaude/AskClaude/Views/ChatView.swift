@@ -8,6 +8,8 @@ struct ChatView: View {
     @State private var inputText = ""
     @State private var appeared = false
     @State private var showFileBrowser = false
+    @State private var showingErrorAlert = false
+    @State private var errorMessage = ""
     @FocusState private var isInputFocused: Bool
     var onToggleSidebar: (() -> Void)?
 
@@ -115,6 +117,19 @@ struct ChatView: View {
             withAnimation(.spring(response: 0.5, dampingFraction: 0.8).delay(0.1)) {
                 appeared = true
             }
+        }
+        .onChange(of: session.error) { _, newError in
+            if let error = newError {
+                errorMessage = error
+                showingErrorAlert = true
+                // Clear the error after capturing it
+                session.error = nil
+            }
+        }
+        .alert("Error", isPresented: $showingErrorAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(errorMessage)
         }
     }
 
