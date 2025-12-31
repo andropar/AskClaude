@@ -32,6 +32,19 @@ struct ChatView: View {
                     showingFiles: showFileBrowser
                 )
 
+                // Error banner
+                if let error = session.error {
+                    ErrorBanner(message: error) {
+                        withAnimation(.easeOut(duration: 0.2)) {
+                            session.error = nil
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.top, 8)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .animation(.spring(response: 0.3, dampingFraction: 0.8), value: session.error)
+                }
+
                 // Messages
                 ScrollViewReader { proxy in
                     ScrollView {
@@ -157,18 +170,19 @@ struct HeaderBar: View {
                 .buttonStyle(.plain)
             }
 
-            // Folder name
+            // Session name
             HStack(spacing: 5) {
                 Image(systemName: "folder.fill")
                     .font(.system(size: 12))
                     .foregroundStyle(Color(hex: "E85D04"))
 
-                Text(session.folderName)
+                Text(session.displayName)
                     .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(Color(hex: "444444"))
                     .lineLimit(1)
                     .truncationMode(.middle)
             }
+            .help(session.folderPath)
 
             Spacer()
 

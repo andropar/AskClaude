@@ -42,6 +42,14 @@ class ChatSession: ObservableObject, Identifiable {
     let folderName: String
     let selectedItem: String?  // The file/folder that was right-clicked
 
+    /// Custom display name for the session (nil means use folderName)
+    @Published var customName: String?
+
+    /// The display name to show in the sidebar
+    var displayName: String {
+        customName ?? folderName
+    }
+
     @Published var messages: [ChatMessage] = []
     @Published var isProcessing = false
     @Published var isThinking = false
