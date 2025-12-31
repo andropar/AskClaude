@@ -1,8 +1,16 @@
 # Shared Task Notes
 
-## Recent Work (2025-12-28)
+## Recent Work (2025-12-31)
 
-### Latest Progress - Testing Infrastructure Added (NEWEST)
+### Latest Progress - Error Handling UI Added (NEWEST)
+**User-facing error display** (ChatView.swift:92-111, 136-159)
+- Added ErrorBanner display when session.error is set
+- Shows errors above the input bar with dismiss button
+- Auto-dismisses non-critical errors after 5 seconds
+- Critical errors (CLI not found, auth issues) persist until dismissed
+- Proper cleanup of dismiss task on view disappear
+
+### Earlier Work - Testing Infrastructure Added
 **Test files created for ClaudeOutputParser** (AskClaudeTests/ClaudeOutputParserTests.swift)
 - Created comprehensive unit test suite with 21 test cases covering:
   - System event parsing
@@ -119,10 +127,11 @@
    - 📝 TODO: Add tests for file browser path navigation logic
    - 📝 TODO: Add tests for ClaudeProcessManager
 
-2. **Error Handling**
-   - Error messages only logged, not shown to users
-   - Add user-facing alert dialogs for errors (auth failures, process crashes)
-   - Add retry logic for Claude CLI connection failures
+2. **Error Handling** ✅ DONE
+   - ✅ ErrorBanner now displays errors to users (ChatView.swift)
+   - ✅ Auto-dismiss for non-critical errors (5 seconds)
+   - ✅ Critical errors persist until manually dismissed
+   - 📝 TODO (optional): Add retry logic for Claude CLI connection failures
 
 3. **Code Organization**
    - MarkdownContentView.swift: 1,186 lines (extract ImageBlockView, FilePreviewView, etc.)

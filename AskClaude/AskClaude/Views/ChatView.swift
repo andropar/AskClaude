@@ -8,6 +8,7 @@ struct ChatView: View {
     @State private var inputText = ""
     @State private var appeared = false
     @State private var showFileBrowser = false
+    @State private var errorDismissTask: Task<Void, Never>?
     @FocusState private var isInputFocused: Bool
     var onToggleSidebar: (() -> Void)?
 
@@ -90,12 +91,25 @@ struct ChatView: View {
                 Spacer(minLength: 0)
             }
             .overlay(alignment: .bottom) {
-                InputBar(
-                    text: $inputText,
-                    isDisabled: session.isProcessing,
-                    onSend: sendMessage
-                )
-                .focused($isInputFocused)
+                VStack(spacing: 8) {
+                    // Error banner
+                    if let error = session.error {
+                        ErrorBanner(
+                            message: error,
+                            onDismiss: { session.error = nil }
+                        )
+                        .padding(.horizontal, 20)
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                    }
+
+                    InputBar(
+                        text: $inputText,
+                        isDisabled: session.isProcessing,
+                        onSend: sendMessage
+                    )
+                    .focused($isInputFocused)
+                }
+                .animation(.spring(response: 0.3, dampingFraction: 0.8), value: session.error != nil)
             }
             .background(Color(hex: "FAFAF8"))
 
@@ -114,6 +128,33 @@ struct ChatView: View {
             isInputFocused = true
             withAnimation(.spring(response: 0.5, dampingFraction: 0.8).delay(0.1)) {
                 appeared = true
+            }
+        }
+        .onDisappear {
+            errorDismissTask?.cancel()
+        }
+        .onChange(of: session.error) { _, newError in
+            // Cancel any existing dismiss task
+            errorDismissTask?.cancel()
+
+            // Schedule auto-dismiss for non-critical errors
+            if let error = newError {
+                // Critical errors that should NOT auto-dismiss
+                let isCritical = error.contains("not found") ||
+                                 error.contains("not signed in") ||
+                                 error.contains("authenticate") ||
+                                 error.contains("sign in")
+
+                if !isCritical {
+                    errorDismissTask = Task {
+                        try? await Task.sleep(for: .seconds(5))
+                        if !Task.isCancelled {
+                            await MainActor.run {
+                                session.error = nil
+                            }
+                        }
+                    }
+                }
             }
         }
     }
