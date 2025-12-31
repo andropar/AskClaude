@@ -27,6 +27,9 @@
 		AAA000015 /* IPCService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100015 /* IPCService.swift */; };
 		AAA000017 /* ChatPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100019 /* ChatPersistence.swift */; };
 		AAA000016 /* AppGroupConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100016 /* AppGroupConfig.swift */; };
+		AAA000022 /* MediaViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100022 /* MediaViews.swift */; };
+		AAA000023 /* FilePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100023 /* FilePreviewView.swift */; };
+		AAA000024 /* MarkdownComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100024 /* MarkdownComponents.swift */; };
 		BBB000001 /* FinderSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB100001 /* FinderSync.swift */; };
 		BBB000002 /* IPCClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB100002 /* IPCClient.swift */; };
 		BBB000003 /* AppGroupConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA100016 /* AppGroupConfig.swift */; };
@@ -71,6 +74,9 @@
 		AAA100008 /* InputBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputBar.swift; sourceTree = "<group>"; };
 		AAA100009 /* ThinkingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkingIndicator.swift; sourceTree = "<group>"; };
 		AAA100010 /* SessionSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSidebar.swift; sourceTree = "<group>"; };
+		AAA100022 /* MediaViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaViews.swift; sourceTree = "<group>"; };
+		AAA100023 /* FilePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilePreviewView.swift; sourceTree = "<group>"; };
+		AAA100024 /* MarkdownComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownComponents.swift; sourceTree = "<group>"; };
 		AAA100011 /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
 		AAA100012 /* ChatSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSession.swift; sourceTree = "<group>"; };
 		AAA100013 /* ClaudeOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeOutput.swift; sourceTree = "<group>"; };
@@ -176,6 +182,9 @@
 				AAA100004 /* ChatView.swift */,
 				AAA100005 /* MessageBubble.swift */,
 				AAA100006 /* MarkdownContentView.swift */,
+				AAA100024 /* MarkdownComponents.swift */,
+				AAA100022 /* MediaViews.swift */,
+				AAA100023 /* FilePreviewView.swift */,
 				AAA100007 /* CodeBlockView.swift */,
 				AAA100008 /* InputBar.swift */,
 				AAA100009 /* ThinkingIndicator.swift */,
@@ -330,6 +339,9 @@
 				AAA000015 /* IPCService.swift in Sources */,
 				AAA000017 /* ChatPersistence.swift in Sources */,
 				AAA000016 /* AppGroupConfig.swift in Sources */,
+				AAA000022 /* MediaViews.swift in Sources */,
+				AAA000023 /* FilePreviewView.swift in Sources */,
+				AAA000024 /* MarkdownComponents.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
